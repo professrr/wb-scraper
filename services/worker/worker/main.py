@@ -14,7 +14,7 @@ from worker.api.router import router
 from worker.clients.categories import CategoriesClient
 from worker.clients.products import ProductsClient
 from worker.config import WorkerSettings
-from worker.exceptions import CategoryNotFoundError, KafkaProduceError, WBApiError
+from worker.exceptions import CategoryNotFoundError, CategoryNotScrappableError, KafkaProduceError, WBApiError
 from worker.services.job_store import JobStore
 from worker.services.scrape_service import ScrapeService
 
@@ -77,6 +77,16 @@ async def category_not_found_handler(_request: Request, exc: CategoryNotFoundErr
     logger.warning("Category not found: %s", exc.url_path)
     return JSONResponse(
         status_code=404,
+        content={"detail": str(exc)},
+    )
+
+
+@app.exception_handler(CategoryNotScrappableError)
+async def category_not_scrappable_handler(_request: Request, exc: CategoryNotScrappableError) -> JSONResponse:
+    """Handle attempts to scrape a category that has no searchQuery."""
+    logger.warning("Category not scrappable: %s (%s)", exc.node_name, exc.url_path)
+    return JSONResponse(
+        status_code=422,
         content={"detail": str(exc)},
     )
 

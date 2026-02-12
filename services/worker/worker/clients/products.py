@@ -25,17 +25,22 @@ class ProductsClient(BaseWBClient):
         )
         return headers
 
-    def _build_query_params(self, search_query: str, page: int) -> dict[str, str]:
+    def _build_query_params(
+        self, search_query: str, page: int, *, sort: str | None = "popular"
+    ) -> dict[str, str]:
         """Build query parameters for the product search endpoint.
 
         Args:
             search_query: The searchQuery string obtained from category resolution.
             page: Page number (1-based).
+            sort: Optional sort mode. Only applied on the first page; ignored for
+                  subsequent pages because the WB API rejects requests with sort
+                  on page >= 2.
 
         Returns:
             Dict of query parameters.
         """
-        return {
+        params: dict[str, str] = {
             "ab_testing": "false",
             "appType": "64",
             "curr": "rub",
@@ -44,8 +49,13 @@ class ProductsClient(BaseWBClient):
             "page": str(page),
             "query": search_query,
             "resultset": "catalog",
-            "sort": "popular",
+            "dest": "-1257786",
         }
+
+        if page == 1 and sort is not None:
+            params["sort"] = sort
+
+        return params
 
     async def fetch_page(self, search_query: str, page: int) -> str:
         """Fetch a single page of product results as raw JSON.

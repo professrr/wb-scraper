@@ -5,7 +5,7 @@ from typing import Any, cast
 from urllib.parse import urlparse
 
 from worker.clients.base import BaseWBClient
-from worker.exceptions import CategoryNotFoundError, WBApiError
+from worker.exceptions import CategoryNotFoundError, CategoryNotScrappableError, WBApiError
 
 logger = logging.getLogger(__name__)
 
@@ -81,15 +81,20 @@ class CategoriesClient(BaseWBClient):
             logger.warning("No node matched URL path '%s'", url_path)
             raise CategoryNotFoundError(url_path)
 
-        search_query: str | None = node.get("searchQuery") or node.get("query")
+        node_name: str = node.get("name", "Unknown")
+
+        search_query: str | None = node.get("searchQuery")
         if not search_query:
-            logger.warning("Node matched but has no searchQuery/query: %s", node.get("name"))
-            raise CategoryNotFoundError(url_path)
+            logger.warning(
+                "Node '%s' has no searchQuery field — cannot be scraped",
+                node_name,
+            )
+            raise CategoryNotScrappableError(url_path, node_name)
 
         logger.info(
             "Category resolved: path='%s' -> name='%s', searchQuery='%s'",
             url_path,
-            node.get("name"),
+            node_name,
             search_query,
         )
         return search_query

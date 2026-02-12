@@ -9,6 +9,23 @@ class CategoryNotFoundError(Exception):
         super().__init__(f"Category not found for path: {url_path}")
 
 
+class CategoryNotScrappableError(Exception):
+    """Raised when a matched category node has no ``searchQuery`` field.
+
+    This covers parent-only nodes (``childrenOnly=true``), container nodes
+    with only ``nodes`` children, and any other node shape that lacks the
+    ``searchQuery`` required for product search.
+    """
+
+    def __init__(self, url_path: str, node_name: str) -> None:
+        self.url_path = url_path
+        self.node_name = node_name
+        super().__init__(
+            f"Category '{node_name}' (path: {url_path}) has no searchQuery "
+            f"and cannot be scraped. Please choose a specific sub-category instead."
+        )
+
+
 class WBApiError(Exception):
     """Raised when the Wildberries mobile API returns an unexpected response."""
 
