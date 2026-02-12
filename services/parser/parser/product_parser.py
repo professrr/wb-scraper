@@ -57,6 +57,7 @@ def parse_products(raw_json: str) -> list[ParsedProduct]:
         basic: int = price_data.get("basic", 0)
         product_price: int = price_data.get("product", 0)
 
+        base_price_rubles = basic / 100
         price_rubles = product_price / 100
         discount = round((basic - product_price) / basic * 100) if basic > 0 else 0
 
@@ -66,6 +67,7 @@ def parse_products(raw_json: str) -> list[ParsedProduct]:
                 product_id=product_id,
                 name=name,
                 price=price_rubles,
+                base_price=base_price_rubles,
                 discount=discount,
             )
         )
