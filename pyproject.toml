@@ -1,0 +1,59 @@
+[project]
+name = "wb-scraper"
+version = "0.1.0"
+description = "Scrape Wildberries products by categories"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.14"
+
+[tool.uv.workspace]
+members = ["services/*", "shared"]
+
+[dependency-groups]
+dev = ["ruff", "pyright"]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+commit_message = "chore(release): v{version}"
+build_command = ""
+
+[tool.ruff]
+target-version = "py314"
+line-length = 120
+src = ["services/worker", "services/parser", "shared"]
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "UP",    # pyupgrade
+    "S",     # bandit (security)
+    "B",     # bugbear
+    "A",     # builtins shadowing
+    "C4",    # comprehensions
+    "DTZ",   # datetime timezone
+    "T20",   # print statements
+    "SIM",   # simplify
+    "TCH",   # type-checking imports
+    "RUF",   # ruff-specific
+    "ASYNC", # async best practices
+    "PTH",   # pathlib
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["worker", "parser", "shared"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pyright]
+pythonVersion = "3.14"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+include = ["services/worker", "services/parser", "shared"]
