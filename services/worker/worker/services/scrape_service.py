@@ -86,10 +86,15 @@ class ScrapeService:
             await self._jobs.update(job_id, status=JobStatus.COMPLETED)
             logger.info("Job %s completed successfully", job_id)
 
-        except Exception:
+        except Exception as exc:
             error_msg = f"Scrape failed for job {job_id}"
             logger.exception(error_msg)
-            await self._jobs.update(job_id, status=JobStatus.FAILED, error=error_msg)
+            await self._jobs.update(
+                job_id,
+                status=JobStatus.FAILED,
+                error=error_msg,
+                error_reason=str(exc),
+            )
 
     def _produce_to_kafka(self, raw_json: str, job_id: UUID, page: int) -> None:
         """Send raw JSON response to Kafka topic.

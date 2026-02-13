@@ -25,5 +25,6 @@ class Job(BaseModel):
     pages_scraped: int = 0
     total_pages: int = 5
     error: str | None = None
+    error_reason: str | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

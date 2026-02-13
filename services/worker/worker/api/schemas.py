@@ -41,5 +41,6 @@ class JobStatusResponse(BaseModel):
     pages_scraped: int
     total_pages: int
     error: str | None
+    error_reason: str | None
     created_at: datetime
     updated_at: datetime

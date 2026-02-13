@@ -58,6 +58,7 @@ async def get_job_status(job_id: UUID, request: Request) -> JobStatusResponse:
         pages_scraped=job.pages_scraped,
         total_pages=job.total_pages,
         error=job.error,
+        error_reason=job.error_reason,
         created_at=job.created_at,
         updated_at=job.updated_at,
     )
