@@ -13,7 +13,9 @@ docker compose up -d --build
 
 ## Категории для скрапинга
 
-[Список всех категорий Wildberries (Gist)](categories.json)
+Некоторые ссылки содержат конкатенацию категории+тэга, так как поиск работает только по категориям - поиск по такому URL не будет работать `https://www.wildberries.ru/catalog/elektronika/razvlecheniya-i-gadzhety/igrovye-konsoli/playstation`.
+
+[Список всех категорий Wildberries](categories.json)
 
 ## Флоу
 
@@ -24,7 +26,7 @@ docker compose up -d --build
 ```bash
 curl -X POST http://localhost:8000/api/v1/scrape \
   -H "Content-Type: application/json" \
-  -d '{"category_url": "https://www.wildberries.ru/catalog/elektronika/razvlecheniya-i-gadzhety/igrovye-konsoli"}'
+  -d '{"category_url": "https://www.wildberries.ru/catalog/zhenshchinam/odezhda/bluzki-i-rubashki"}'
 ```
 
 **2. Проверить статус**
