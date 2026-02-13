@@ -21,7 +21,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM base AS runtime
 
 COPY --from=deps /app/.venv /app/.venv
-ENV PATH="/app/.venv/bin:$PATH"
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app/services/worker:/app/shared"
 
 COPY shared/shared/ /app/shared/shared/
 COPY services/worker/worker/ /app/services/worker/worker/

@@ -57,3 +57,4 @@ typeCheckingMode = "strict"
 venvPath = "."
 venv = ".venv"
 include = ["services/worker", "services/parser", "shared"]
+extraPaths = ["services/worker", "services/parser", "shared"]
