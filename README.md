@@ -5,7 +5,7 @@
 ## Запуск
 
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
 
 - Worker API — http://localhost:8000/docs
@@ -13,11 +13,13 @@ docker compose up --build
 
 ## Категории для скрапинга
 
-[Список всех категорий Wildberries (Gist)](https://gist.github.com/pocketgodru/e8e33d1c1db7e4c75e8af784ddf4a97a)
+[Список всех категорий Wildberries (Gist)](categories.json)
 
 ## Флоу
 
-**1. Отправить категорию на парсинг**
+**1. Отправить категорию на скрапинг**
+
+Воспользоваться [Swagger](http://localhost:8000/docs#/scrape/start_scrape_api_v1_scrape_post), либо:
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/scrape \
@@ -26,6 +28,8 @@ curl -X POST http://localhost:8000/api/v1/scrape \
 ```
 
 **2. Проверить статус**
+
+Воспользоваться [Swagger](http://localhost:8000/docs#/scrape/get_job_status_api_v1_scrape__job_id__get), либо:
 
 ```bash
 curl http://localhost:8000/api/v1/scrape/{job_id}
@@ -42,13 +46,13 @@ curl http://localhost:8000/api/v1/scrape/{job_id}
 
 Принимает URL категории, получает товары с первых 5 страниц через мобильное API, отправляет каждый raw JSON в Kafka-топик `wb-category`.
 
-- `POST /api/v1/scrape` — запуск парсинга категории
+- `POST /api/v1/scrape` — запуск скрапинга категории
 - `GET /api/v1/scrape/{job_id}` — статус задачи
 - `GET /docs` — Swagger UI
 
 ### Parser (Kafka Consumer)
 
-Headless-микросервис, 3 реплики. Читает из `wb-category`, парсит товары, отправляет в `wb-products`.
+Микросервис, 3 реплики. Читает из `wb-category`, парсит товары, отправляет в `wb-products`.
 
 3 партиции / 3 реплики = 1:1 — исключает повторную обработку.
 
