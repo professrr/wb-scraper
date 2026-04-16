@@ -5,7 +5,7 @@ description = "Shared models, Kafka client, and configuration for wb-scraper"
 requires-python = ">=3.14"
 dependencies = [
     "pydantic>=2.10",
-    "pydantic-settings>=2.7",
+    "pydantic-settings>=2.13.1",
     "confluent-kafka>=2.13.0",
 ]
 
