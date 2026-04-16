@@ -6,7 +6,7 @@ requires-python = ">=3.14"
 dependencies = [
     "pydantic>=2.10",
     "pydantic-settings>=2.7",
-    "confluent-kafka>=2.13.0",
+    "confluent-kafka>=2.14.0",
 ]
 
 [build-system]
